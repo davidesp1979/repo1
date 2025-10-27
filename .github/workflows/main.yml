@@ -1,0 +1,39 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main  # oppure il branch che preferisci
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout del codice
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Legge la versione dal file VERSION (oppure puoi impostarla come secret)
+      - name: Set version
+        id: version
+        run: |
+          VERSION=$(cat VERSION)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      # Step 3: Log in su Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Step 4: Build dell'immagine Docker
+      - name: Build Docker image
+        run: |
+          docker build -t davideparodi/repodavelearn:${{ env.VERSION }} .
+
+      # Step 5: Push dell'immagine su Docker Hub
+      - name: Push Docker image
+        run: |
+          docker push davideparodi/repodavelearn:${{ env.VERSION }}
