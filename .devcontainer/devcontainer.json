@@ -1,0 +1,24 @@
+// For format details, see https://aka.ms/devcontainer.json. 
+// For config options, see the README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node
+
+{
+	"name": "Node.js Custom",
+
+	"build": {
+		"dockerfile": "../Dockerfile"
+	},
+
+	"workspaceFolder": "/workspaces/repo1"
+
+	
+	/* 
+	// Se vuoi esporre porte, decommenta e aggiungi:
+	// "forwardPorts": [3000],
+
+	// Comando da eseguire dopo la creazione del container:
+	// "postCreateCommand": "npm install",
+
+	// Utente root:
+	// "remoteUser": "root"
+	*/
+}
