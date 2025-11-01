@@ -37,7 +37,7 @@ jobs:
       - name: Checkout manifests repository
         uses: actions/checkout@v3
         with:
-          repository: https://github.com/davidesp1979/repomanifest
+          repository: davidesp1979/repomanifest
           token: ${{ secrets.GH_PAT }}
           path: manifests
 
