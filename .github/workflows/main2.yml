@@ -3,7 +3,7 @@ name: Build and Deploy   # Nome del workflow (apparirà nella sezione "Actions" 
 on:
   push:
     branches:
-      - main            # Esegui questo workflow solo quando fai push sul branch "main"
+      - old            # Esegui questo workflow solo quando fai push sul branch "main"
 
 jobs:
   build-and-push:        # Nome del job principale
