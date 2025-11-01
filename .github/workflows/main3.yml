@@ -37,7 +37,8 @@ jobs:
       - name: Checkout manifests repository
         uses: actions/checkout@v3
         with:
-          repository: davidesp1979/repomanifest
+          repository: davidesp1979/repomanifest   # assicurati che questo sia il nome giusto
+          ref: master                             # branch corretto
           token: ${{ secrets.GH_PAT }}
           path: manifests
 
@@ -51,3 +52,7 @@ jobs:
           cd manifests
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add deployment.yaml
+          git commit -m "Update image tag to version ${{ env.VERSION }}"
+          git push origin master
+
