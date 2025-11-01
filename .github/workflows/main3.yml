@@ -3,7 +3,7 @@ name: Build, Push Docker Image and Update Manifests
 on:
   push:
     branches:
-      - main
+      - master     # Il branch su cui lavori
   workflow_dispatch:
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout del repository sorgente
+      # 1️⃣ Clona il repo principale (il codice sorgente)
       - name: Checkout source repository
         uses: actions/checkout@v3
 
@@ -22,7 +22,7 @@ jobs:
           VERSION=$(cat VERSION)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      # 3️⃣ Login a Docker Hub
+      # 3️⃣ Login su Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -39,28 +39,28 @@ jobs:
         run: |
           docker push davideparodi/repodavelearn:${{ env.VERSION }}
 
-      # 6️⃣ Checkout del repository dei manifest per ArgoCD
+      # 6️⃣ Clona il repository dei manifest Kubernetes
       - name: Checkout manifests repository
         uses: actions/checkout@v3
         with:
           repository: davidesp1979/repomanifest
-          ref: main
           token: ${{ secrets.GH_PAT }}
           path: manifests
+          ref: main   # Usa il branch esatto del repo manifest
 
-      # 7️⃣ Aggiorna il tag dell'immagine nel file deployment.yaml
+      # 7️⃣ Aggiorna il tag dell’immagine nel file deployment.yaml
       - name: Update image tag in manifests
         run: |
           cd manifests
           sed -i "s|\(davideparodi/repodavelearn:\).*|\1${{ env.VERSION }}|" deployment.yaml
 
-      # 8️⃣ Commit e push delle modifiche sul repo manifest
+      # 8️⃣ Commit e push delle modifiche al repo manifest
       - name: Commit and push updated manifests
         run: |
           cd manifests
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add deployment.yaml
-          git commit -m "Update image tag to version ${{ env.VERSION }}" || echo "No changes to commit"
+          git commit -m "Update image tag to version ${{ env.VERSION }}"
           git push origin main
 
