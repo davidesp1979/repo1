@@ -52,7 +52,7 @@ jobs:
       - name: Update image tag in manifests
         run: |
           cd manifests
-          sed -i "s|\(davideparodi/repodavelearn:\).*|\1${{ env.VERSION }}|" deployment.yaml
+          sed -i "s|image:.*|image: docker.io/davideparodi/repodavelearn:${{ env.VERSION }}|" deployment.yaml
 
       # 8️⃣ Commit e push delle modifiche al repo manifest
       - name: Commit and push updated manifests
